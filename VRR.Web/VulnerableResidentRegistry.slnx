@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="../VRR.Application/VRR.Application.csproj" />
+  <Project Path="../VRR.Domain/VRR.Domain.csproj" />
+  <Project Path="../VRR.Infrastructure/VRR.Infrastructure.csproj" />
+  <Project Path="../VRR.Tests/VRR.Tests.csproj" />
+  <Project Path="VulnerableResidentRegistry.csproj" />
+</Solution>
