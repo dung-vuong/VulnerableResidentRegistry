@@ -21,7 +21,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Risk</th><th>Resident</th><th>Address</th><th>Contact</th><th>Status</th>
+            <th>Risk</th><th>Resident</th><th>Address</th><th>Contact</th><th>Status</th><th></th>
         </tr>
     </thead>
     <tbody>
@@ -33,6 +33,7 @@
                 <td>@c.Resident.AddressLine, @c.Resident.ZipCode</td>
                 <td>@c.Resident.EmergencyContactName (@c.Resident.EmergencyContactPhone)</td>
                 <td>@c.Status</td>
+                <td><a asp-controller="CheckIns" asp-action="Update" asp-route-id="@c.Id">Update</a></td>
             </tr>
         }
     </tbody>

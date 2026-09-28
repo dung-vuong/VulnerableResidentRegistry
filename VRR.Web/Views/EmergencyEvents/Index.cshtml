@@ -3,8 +3,10 @@
 @{ ViewData["Title"] = "Emergency Events"; }
 
 <h1>Emergency Events</h1>
-<a asp-action="Declare" class="btn btn-danger mb-3">Declare New Emergency</a>
-
+@if (User.IsInRole("Admin") || User.IsInRole("EmergencyCoordinator"))
+{
+    <a asp-action="Declare" class="btn btn-danger mb-3">Declare New Emergency</a>
+}
 <table class="table">
     <thead><tr><th>Type</th><th>Description</th><th>Zones</th><th>Declared</th><th></th></tr></thead>
     <tbody>

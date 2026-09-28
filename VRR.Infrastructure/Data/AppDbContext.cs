@@ -13,6 +13,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Resident> Residents => Set<Resident>();
     public DbSet<EmergencyEvent> EmergencyEvents => Set<EmergencyEvent>();
     public DbSet<CheckIn> CheckIns => Set<CheckIn>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,5 +34,8 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(e => e.CheckIns)
             .HasForeignKey(c => c.EmergencyEventId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<AuditLog>()
+            .HasIndex(a => a.Timestamp);
     }
 }

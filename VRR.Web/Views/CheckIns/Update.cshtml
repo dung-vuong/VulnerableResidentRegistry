@@ -1,0 +1,31 @@
+﻿@model VRR.Application.DTOs.UpdateCheckInDto
+
+@{ ViewData["Title"] = "Update Check-In"; }
+
+<h1>Update Check-In</h1>
+<p>Resident: <strong>@ViewData["ResidentName"]</strong></p>
+
+<form asp-action="Update" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <select asp-for="Status" class="form-select"
+                asp-items="Html.GetEnumSelectList<VRR.Domain.Enums.CheckInStatus>()"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Notes" class="form-label"></label>
+        <textarea asp-for="Notes" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-controller="EmergencyEvents" asp-action="Details"
+       asp-route-id="@ViewData["EventId"]" class="btn btn-link">Cancel</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

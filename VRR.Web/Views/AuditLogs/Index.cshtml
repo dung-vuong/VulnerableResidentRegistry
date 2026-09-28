@@ -1,0 +1,28 @@
+﻿@model List<VRR.Domain.Entities.AuditLog>
+
+@{ ViewData["Title"] = "Audit Log"; }
+
+<h1>Audit Log</h1>
+<p>Most recent 200 entries.</p>
+
+<table class="table table-sm table-striped">
+    <thead>
+        <tr>
+            <th>When (UTC)</th><th>User</th><th>Action</th>
+            <th>Entity</th><th>Details</th><th>IP</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var a in Model)
+    {
+        <tr>
+            <td>@a.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+            <td>@a.UserName</td>
+            <td>@a.Action</td>
+            <td>@a.EntityType @a.EntityId</td>
+            <td>@a.Details</td>
+            <td>@a.IpAddress</td>
+        </tr>
+    }
+    </tbody>
+</table>

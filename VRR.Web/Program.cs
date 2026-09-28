@@ -16,6 +16,7 @@ namespace VulnerableResidentRegistry
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IAuditService, AuditService>();
             builder.Services.AddScoped<IEmergencyDeclarationService, EmergencyDeclarationService>();
             builder.Services.AddScoped<IRiskScoringService, RiskScoringService>();
             builder.Services.AddDbContext<AppDbContext>(options =>

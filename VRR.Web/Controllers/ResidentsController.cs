@@ -13,11 +13,14 @@ public class ResidentsController : Controller
 {
     private readonly AppDbContext _context;
     private readonly IRiskScoringService _riskScoringService;
+    private readonly IAuditService _audit;
 
-    public ResidentsController(AppDbContext context, IRiskScoringService riskScoringService)
+
+    public ResidentsController(AppDbContext context, IRiskScoringService riskScoringService, IAuditService audit)
     {
         _context = context;
         _riskScoringService = riskScoringService;
+        _audit = audit;
     }
 
     [HttpGet]
@@ -76,6 +79,9 @@ public class ResidentsController : Controller
         var residents = await _context.Residents
             .OrderByDescending(r => r.RiskScore)
             .ToListAsync();
+
+        await this.AuditAsync(_audit, "ViewResidentList", "Resident",
+            details: $"{residents.Count} records returned");
 
         return View(residents);
     }
