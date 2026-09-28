@@ -1,0 +1,39 @@
+﻿@model VRR.Application.DTOs.DeclareEmergencyDto
+
+@{ ViewData["Title"] = "Declare Emergency"; }
+
+<h1>Declare Emergency</h1>
+
+<form asp-action="Declare" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label"></label>
+        <select asp-for="Type" class="form-select"
+                asp-items="Html.GetEnumSelectList<VRR.Domain.Enums.EmergencyType>()"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AffectedZone" class="form-label"></label>
+        <input asp-for="AffectedZone" class="form-control" placeholder="95112, 95113" />
+        <span asp-validation-for="AffectedZone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Severity" class="form-label"></label>
+        <input asp-for="Severity" type="number" min="1" max="5" class="form-control" />
+        <span asp-validation-for="Severity" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-danger">Declare Emergency</button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

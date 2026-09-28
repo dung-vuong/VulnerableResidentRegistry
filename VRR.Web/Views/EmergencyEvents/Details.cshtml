@@ -1,0 +1,39 @@
+﻿@model VRR.Domain.Entities.EmergencyEvent
+
+@{
+    ViewData["Title"] = "Emergency Details";
+    var total = Model.CheckIns.Count;
+    var completed = Model.CheckIns.Count(c => c.Status == VRR.Domain.Enums.CheckInStatus.Completed);
+    var percent = total == 0 ? 0 : (int)Math.Round(completed * 100.0 / total);
+}
+
+<h1>@Model.Type: @Model.Description</h1>
+<p>
+    Zones: @Model.AffectedZone | Severity: @Model.Severity |
+    Declared: @Model.DeclaredAt.ToString("g") UTC
+</p>
+
+<div class="progress mb-3" role="progressbar" aria-label="Check-in completion">
+    <div class="progress-bar" style="width: @percent%">@percent%</div>
+</div>
+<p>@completed of @total check-ins completed.</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Risk</th><th>Resident</th><th>Address</th><th>Contact</th><th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model.CheckIns.OrderByDescending(c => c.Resident.RiskScore))
+        {
+            <tr>
+                <td>@c.Resident.RiskScore</td>
+                <td>@c.Resident.FirstName @c.Resident.LastName</td>
+                <td>@c.Resident.AddressLine, @c.Resident.ZipCode</td>
+                <td>@c.Resident.EmergencyContactName (@c.Resident.EmergencyContactPhone)</td>
+                <td>@c.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>

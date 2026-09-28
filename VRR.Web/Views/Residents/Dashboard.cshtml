@@ -1,0 +1,34 @@
+﻿@model List<VRR.Domain.Entities.Resident>
+
+@{
+    ViewData["Title"] = "Staff Dashboard";
+}
+
+<h1>Staff Dashboard</h1>
+<p>@Model.Count total registered residents.</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Risk Score</th>
+            <th>Mobility</th>
+            <th>Lives Alone</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var resident in Model)
+        {
+            <tr>
+                <td>@resident.FirstName @resident.LastName</td>
+                <td>@resident.AddressLine, @resident.City @resident.ZipCode</td>
+                <td>@resident.RiskScore</td>
+                <td>@resident.MobilityStatus</td>
+                <td>@(resident.LivesAlone ? "Yes" : "No")</td>
+                <td>@resident.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
