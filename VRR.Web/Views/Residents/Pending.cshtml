@@ -1,0 +1,45 @@
+﻿@model List<VRR.Domain.Entities.Resident>
+
+@{ ViewData["Title"] = "Pending Verification"; }
+
+<h1>Pending Verification</h1>
+
+@if (TempData["Message"] is string message)
+{
+    <div class="alert alert-success" role="status">@message</div>
+}
+
+@if (!Model.Any())
+{
+    <p>No residents are waiting for verification.</p>
+}
+else
+{
+    <p>@Model.Count resident(s) waiting, highest risk first.</p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Risk</th><th>Name</th><th>Address</th>
+                <th>Emergency contact</th><th>Registered (UTC)</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.RiskScore</td>
+                <td>@r.FirstName @r.LastName</td>
+                <td>@r.AddressLine, @r.City @r.ZipCode</td>
+                <td>@r.EmergencyContactName (@r.EmergencyContactPhone)</td>
+                <td>@r.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <form asp-action="Verify" asp-route-id="@r.Id" method="post">
+                        <button type="submit" class="btn btn-sm btn-success">Verify</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

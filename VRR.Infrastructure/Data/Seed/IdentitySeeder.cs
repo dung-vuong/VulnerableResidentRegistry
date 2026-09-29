@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using VRR.Domain.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace VRR.Infrastructure.Data.Seed;
 
@@ -11,7 +12,7 @@ public static class IdentitySeeder
 {
     private static readonly string[] Roles = { "Admin", "EmergencyCoordinator", "CaseWorker" };
 
-    public static async Task SeedAsync(IServiceProvider serviceProvider)
+    public static async Task SeedAsync(IServiceProvider serviceProvider, IConfiguration config)
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -25,9 +26,11 @@ public static class IdentitySeeder
             }
         }
 
-        // Create a default Admin account if none exists
-        const string adminEmail = "admin@vrr.local";
-        const string adminPassword = "Admin123!";
+        var adminEmail = config["SeedAdmin:Email"];
+        var adminPassword = config["SeedAdmin:Password"];
+
+        if (string.IsNullOrWhiteSpace(adminEmail) || string.IsNullOrWhiteSpace(adminPassword))
+            return; // no seed admin configured — skip silently
 
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
         if (adminUser == null)

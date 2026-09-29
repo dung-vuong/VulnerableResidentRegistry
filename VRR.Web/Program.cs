@@ -36,7 +36,8 @@ namespace VulnerableResidentRegistry
             // Seed roles and default admin account
             using (var scope = app.Services.CreateScope())
             {
-                await VRR.Infrastructure.Data.Seed.IdentitySeeder.SeedAsync(scope.ServiceProvider);
+                await VRR.Infrastructure.Data.Seed.IdentitySeeder.SeedAsync(
+                    scope.ServiceProvider, builder.Configuration);
             }
 
             // Configure the HTTP request pipeline.

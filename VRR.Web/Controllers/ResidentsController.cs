@@ -85,4 +85,42 @@ public class ResidentsController : Controller
 
         return View(residents);
     }
+
+    [Authorize(Roles = "Admin,EmergencyCoordinator,CaseWorker")]
+    public async Task<IActionResult> Pending()
+    {
+        var pending = await _context.Residents
+            .Where(r => r.Status == ResidentStatus.PendingVerification)
+            .OrderByDescending(r => r.RiskScore)
+            .ToListAsync();
+
+        await this.AuditAsync(_audit, "ViewPendingResidents", "Resident",
+            details: $"{pending.Count} records returned");
+
+        return View(pending);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin,EmergencyCoordinator,CaseWorker")]
+    public async Task<IActionResult> Verify(int id)
+    {
+        var resident = await _context.Residents.FindAsync(id);
+        if (resident == null) return NotFound();
+
+        // Guard against double-clicks or stale pages
+        if (resident.Status != ResidentStatus.PendingVerification)
+            return RedirectToAction(nameof(Pending));
+
+        var oldStatus = resident.Status;
+        resident.Status = ResidentStatus.Verified;
+        resident.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        await this.AuditAsync(_audit, "VerifyResident", "Resident",
+            resident.Id.ToString(), $"Status {oldStatus} -> {resident.Status}");
+
+        TempData["Message"] = "Resident verified.";
+        return RedirectToAction(nameof(Pending));
+    }
 }

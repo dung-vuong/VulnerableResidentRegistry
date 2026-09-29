@@ -24,23 +24,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="AuditLogs" asp-action="Index">Audit Log</a>
                             </li>
                         }
+                        @if (User.IsInRole("Admin") || User.IsInRole("EmergencyCoordinator") || User.IsInRole("CaseWorker"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Residents" asp-action="Dashboard">Residents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Residents" asp-action="Pending">Pending</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="EmergencyEvents" asp-action="Index">Emergencies</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Residents" asp-action="Register">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Residents" asp-action="Dashboard">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="EmergencyEvents" asp-action="Declare">Declare Emergency</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

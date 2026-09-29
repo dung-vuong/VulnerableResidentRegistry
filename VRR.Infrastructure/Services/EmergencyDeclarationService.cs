@@ -38,7 +38,7 @@ public class EmergencyDeclarationService : IEmergencyDeclarationService
 
         var residents = await _context.Residents
             .Where(r => r.ConsentGiven
-                        && r.Status != ResidentStatus.Inactive
+                        && r.Status == ResidentStatus.Verified
                         && zones.Contains(r.ZipCode.Substring(0, 5)))
             .ToListAsync();
 
