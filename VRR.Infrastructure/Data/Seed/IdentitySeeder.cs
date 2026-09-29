@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using VRR.Domain.Entities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using VRR.Domain.Entities;
 
 namespace VRR.Infrastructure.Data.Seed;
 
@@ -17,13 +14,10 @@ public static class IdentitySeeder
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-        // Create roles if they don't exist
         foreach (var role in Roles)
         {
             if (!await roleManager.RoleExistsAsync(role))
-            {
                 await roleManager.CreateAsync(new IdentityRole(role));
-            }
         }
 
         var adminEmail = config["SeedAdmin:Email"];
@@ -44,9 +38,7 @@ public static class IdentitySeeder
 
             var result = await userManager.CreateAsync(adminUser, adminPassword);
             if (result.Succeeded)
-            {
                 await userManager.AddToRoleAsync(adminUser, "Admin");
-            }
         }
     }
 }

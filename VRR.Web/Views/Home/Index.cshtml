@@ -1,8 +1,303 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    /* ---------- Hero ---------- */
+    .hero {
+        background: linear-gradient(135deg, #0b3d5c 0%, #124a70 50%, #0b3d5c 100%);
+        color: #fff;
+        border-radius: 12px;
+        padding: 4rem 2.5rem;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 3rem;
+    }
+    .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 15% 20%, rgba(255,255,255,0.06) 0%, transparent 40%),
+            radial-gradient(circle at 85% 80%, rgba(214,69,69,0.15) 0%, transparent 45%);
+        pointer-events: none;
+    }
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 640px;
+        opacity: 0;
+        animation: fadeUp .8s ease-out forwards;
+    }
+    .hero h1 {
+        font-weight: 700;
+        font-size: 2.4rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+    .hero p.lead {
+        color: rgba(255,255,255,.85);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    .hero .btn-cta {
+        background-color: #d64545;
+        border-color: #d64545;
+        color: #fff;
+        padding: .65rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: transform .15s ease, background-color .15s ease;
+    }
+    .hero .btn-cta:hover {
+        background-color: #b93a3a;
+        border-color: #b93a3a;
+        transform: translateY(-2px);
+        color: #fff;
+    }
+    .hero .btn-secondary-cta {
+        background-color: transparent;
+        border: 1px solid rgba(255,255,255,.5);
+        color: #fff;
+        padding: .65rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        margin-left: .75rem;
+        transition: background-color .15s ease, transform .15s ease;
+    }
+    .hero .btn-secondary-cta:hover {
+        background-color: rgba(255,255,255,.1);
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    /* ---------- Fade-up animation, staggered ---------- */
+    @@keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-item {
+        opacity: 0;
+        animation: fadeUp .6s ease-out forwards;
+    }
+    .fade-item.delay-1 { animation-delay: .1s; }
+    .fade-item.delay-2 { animation-delay: .2s; }
+    .fade-item.delay-3 { animation-delay: .3s; }
+    .fade-item.delay-4 { animation-delay: .4s; }
+
+    /* ---------- Stats strip ---------- */
+    .stats-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+    .stat-card {
+        flex: 1 1 200px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        border: 1px solid #eef0f2;
+    }
+    .stat-card .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0b3d5c;
+        display: block;
+    }
+    .stat-card .stat-label {
+        color: #6c757d;
+        font-size: .9rem;
+        text-transform: uppercase;
+        letter-spacing: .03em;
+    }
+
+    /* ---------- Feature cards ---------- */
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+    .feature-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 1.75rem;
+        border: 1px solid #eef0f2;
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(11,61,92,.1);
+    }
+    .feature-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        background: #eaf2f7;
+        color: #0b3d5c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    .feature-card h3 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: .5rem;
+    }
+    .feature-card p {
+        color: #6c757d;
+        font-size: .92rem;
+        margin-bottom: 0;
+    }
+
+    /* ---------- How it works ---------- */
+    .steps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        counter-reset: step;
+        margin-bottom: 3rem;
+    }
+    .step {
+        flex: 1 1 200px;
+        position: relative;
+        padding-left: 3rem;
+    }
+    .step::before {
+        counter-increment: step;
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: #0b3d5c;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: .9rem;
+    }
+    .step h4 {
+        font-size: .95rem;
+        font-weight: 600;
+        margin-bottom: .25rem;
+    }
+    .step p {
+        color: #6c757d;
+        font-size: .88rem;
+        margin-bottom: 0;
+    }
+
+    /* ---------- Closing CTA band ---------- */
+    .cta-band {
+        background: #eaf2f7;
+        border-radius: 10px;
+        padding: 2.5rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .cta-band h2 {
+        font-weight: 700;
+        color: #0b3d5c;
+        margin-bottom: .5rem;
+    }
+    .cta-band p {
+        color: #6c757d;
+        margin-bottom: 1.5rem;
+    }
+</style>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Know who needs checking on — before the emergency hits.</h1>
+        <p class="lead">
+            The Vulnerable Resident Registry lets residents with health, mobility,
+            or isolation risk factors register once, so responders can prioritize
+            wellness checks the moment a heatwave, flood, or outage is declared.
+        </p>
+        <a asp-controller="Residents" asp-action="Register" class="btn btn-cta">Register a Resident</a>
+        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-secondary-cta">Staff Login</a>
+    </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-strip">
+    <div class="stat-card fade-item delay-1">
+        <span class="stat-number">2 min</span>
+        <span class="stat-label">To register</span>
+    </div>
+    <div class="stat-card fade-item delay-2">
+        <span class="stat-number">Risk-based</span>
+        <span class="stat-label">Prioritization</span>
+    </div>
+    <div class="stat-card fade-item delay-3">
+        <span class="stat-number">Zone-targeted</span>
+        <span class="stat-label">Emergency response</span>
+    </div>
+    <div class="stat-card fade-item delay-4">
+        <span class="stat-number">Fully audited</span>
+        <span class="stat-label">Every access logged</span>
+    </div>
+</div>
+
+<!-- Features -->
+<h2 class="h4 mb-3 fade-item">Built for real emergencies, not just paperwork</h2>
+<div class="feature-grid">
+    <div class="feature-card fade-item delay-1">
+        <div class="feature-icon">&#9878;</div>
+        <h3>Weighted Risk Scoring</h3>
+        <p>Age, mobility, isolation, and medical needs combine into a single score, so the highest-risk residents surface first automatically.</p>
+    </div>
+    <div class="feature-card fade-item delay-2">
+        <div class="feature-icon">&#128737;</div>
+        <h3>Staff Verification</h3>
+        <p>Every registration is reviewed by staff before it becomes eligible for emergency response — no unverified data driving decisions.</p>
+    </div>
+    <div class="feature-card fade-item delay-3">
+        <div class="feature-icon">&#9888;</div>
+        <h3>One-Click Declarations</h3>
+        <p>Coordinators declare an emergency by zone, and a prioritized check-in list is generated instantly for field staff.</p>
+    </div>
+    <div class="feature-card fade-item delay-4">
+        <div class="feature-icon">&#128269;</div>
+        <h3>Full Audit Trail</h3>
+        <p>Every view and change to resident data is logged with who, what, and when — built for compliance review, not just debugging.</p>
+    </div>
+</div>
+
+<!-- How it works -->
+<h2 class="h4 mb-3 fade-item">How it works</h2>
+<div class="steps">
+    <div class="step fade-item delay-1">
+        <h4>Register</h4>
+        <p>A resident or family member submits basic info and needs, once.</p>
+    </div>
+    <div class="step fade-item delay-2">
+        <h4>Verify</h4>
+        <p>Staff review and confirm the registration is legitimate.</p>
+    </div>
+    <div class="step fade-item delay-3">
+        <h4>Declare</h4>
+        <p>When an emergency hits a zone, a coordinator declares it in seconds.</p>
+    </div>
+    <div class="step fade-item delay-4">
+        <h4>Check In</h4>
+        <p>Field staff work the prioritized list and mark outcomes in real time.</p>
+    </div>
+</div>
+
+<!-- Closing CTA -->
+<div class="cta-band fade-item">
+    <h2>Have someone who should be on this list?</h2>
+    <p>It takes about two minutes, and it could make the difference during the next emergency.</p>
+    <a asp-controller="Residents" asp-action="Register" class="btn btn-cta">Register Now</a>
 </div>
