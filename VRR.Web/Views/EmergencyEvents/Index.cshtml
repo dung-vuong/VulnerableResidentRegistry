@@ -3,20 +3,44 @@
 @{ ViewData["Title"] = "Emergency Events"; }
 
 <h1>Emergency Events</h1>
+
 @if (User.IsInRole("Admin") || User.IsInRole("EmergencyCoordinator"))
 {
     <a asp-action="Declare" class="btn btn-danger mb-3">Declare New Emergency</a>
 }
+
 <table class="table">
-    <thead><tr><th>Type</th><th>Description</th><th>Zones</th><th>Declared</th><th></th></tr></thead>
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Zones</th>
+            <th>Declared</th>
+            <th>Progress</th>
+            <th></th>
+        </tr>
+    </thead>
     <tbody>
     @foreach (var e in Model)
     {
+        var total = e.CheckIns.Count;
+        var completed = e.CheckIns.Count(c => c.Status == VRR.Domain.Enums.CheckInStatus.Completed);
+        var percent = total == 0 ? 0 : (int)Math.Round(completed * 100.0 / total);
+
         <tr>
             <td>@e.Type</td>
             <td>@e.Description</td>
             <td>@e.AffectedZone</td>
             <td>@e.DeclaredAt.ToString("g")</td>
+            <td style="min-width: 160px;">
+                <div class="progress" role="progressbar" aria-label="Check-in completion"
+                     aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="height: 18px;">
+                    <div class="progress-bar @(e.IsActive ? "" : "bg-secondary")" style="width: @percent%">
+                        @percent%
+                    </div>
+                </div>
+                <small class="text-muted">@completed of @total</small>
+            </td>
             <td><a asp-action="Details" asp-route-id="@e.Id">View</a></td>
         </tr>
     }

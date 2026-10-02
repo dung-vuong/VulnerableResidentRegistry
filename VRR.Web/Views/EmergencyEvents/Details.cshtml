@@ -7,6 +7,8 @@
     var percent = total == 0 ? 0 : (int)Math.Round(completed * 100.0 / total);
 }
 
+<a asp-action="Index" class="btn btn-outline-secondary btn-sm mb-3">&larr; Back to Emergency Events</a>
+
 <h1>@Model.Type: @Model.Description</h1>
 <p>
     Zones: @Model.AffectedZone | Severity: @Model.Severity |
@@ -19,22 +21,5 @@
 <p>@completed of @total check-ins completed.</p>
 
 <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Risk</th><th>Resident</th><th>Address</th><th>Contact</th><th>Status</th><th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var c in Model.CheckIns.OrderByDescending(c => c.Resident.RiskScore))
-        {
-            <tr>
-                <td>@c.Resident.RiskScore</td>
-                <td>@c.Resident.FirstName @c.Resident.LastName</td>
-                <td>@c.Resident.AddressLine, @c.Resident.ZipCode</td>
-                <td>@c.Resident.EmergencyContactName (@c.Resident.EmergencyContactPhone)</td>
-                <td>@c.Status</td>
-                <td><a asp-controller="CheckIns" asp-action="Update" asp-route-id="@c.Id">Update</a></td>
-            </tr>
-        }
-    </tbody>
+    ...
 </table>

@@ -26,6 +26,7 @@ public class EmergencyEventsController : Controller
     public async Task<IActionResult> Index()
     {
         var events = await _context.EmergencyEvents
+            .Include(e => e.CheckIns)
             .OrderByDescending(e => e.DeclaredAt)
             .ToListAsync();
         return View(events);
